@@ -18,21 +18,10 @@ def get_movies(how_many, list_type="popular"):
     data = get_movies_list(list_type)
     return data["results"][:how_many]
 
-def get_available_lists():
-    endpoint = "https://api.themoviedb.org/3/movie/list"
-    headers = {
-        "Authorization": f"Bearer {API_TOKEN}"
-    }
-    response = requests.get(endpoint, headers=headers)
-    response.raise_for_status()
-    lists = response.json()
-    return {list["id"]: list["name"] for list in lists["results"]}
-
-@app.context_processor
-def utility_processor():
-    def tmdb_image_url(path, size):
-        return tmdb_client.get_poster_url(path, size)
-    return {"tmdb_image_url": tmdb_image_url}
+def get_movie_info(movie):
+    movie_id = movie['id']
+    title = movie['title']
+    return {"id": movie_id, "title": title}
 
 def get_single_movie(movie_id):
     endpoint = f"https://api.themoviedb.org/3/movie/{movie_id}"
